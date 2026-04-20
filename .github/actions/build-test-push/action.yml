@@ -68,6 +68,13 @@ runs:
     - name: Check out code
       uses: actions/checkout@v6
 
+    - name: Log in to GitHub Container Registry
+      uses: docker/login-action@v3
+      with:
+        registry: ghcr.io
+        username: ${{ github.actor }}
+        password: ${{ inputs.github_token }}
+
     - name: Log in to Docker Hub
       if: inputs.docker_hub_username != ''
       uses: docker/login-action@v3
@@ -106,7 +113,7 @@ runs:
           --dry-run "$INPUT_DRY_RUN"
 
     - name: Push
-      if: inputs.docker_hub_username != ''
+      if: inputs.dry_run != 'true'
       shell: bash
       env:
         INPUT_TAGS: ${{ steps.build.outputs.tags }},${{ steps.build.outputs.tags_chromium }},${{ steps.build.outputs.tags_libreoffice }},${{ steps.build.outputs.tags_cloud_run }},${{ steps.build.outputs.tags_cloud_run_chromium }},${{ steps.build.outputs.tags_cloud_run_libreoffice }},${{ steps.build.outputs.tags_aws_lambda }},${{ steps.build.outputs.tags_aws_lambda_chromium }},${{ steps.build.outputs.tags_aws_lambda_libreoffice }}
