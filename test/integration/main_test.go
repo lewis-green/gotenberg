@@ -16,6 +16,7 @@ import (
 )
 
 func TestMain(m *testing.M) {
+	registry := flag.String("gotenberg-docker-registry", "", "")
 	repository := flag.String("gotenberg-docker-repository", "", "")
 	version := flag.String("gotenberg-version", "", "")
 	platform := flag.String("gotenberg-container-platform", "", "")
@@ -32,6 +33,7 @@ func TestMain(m *testing.M) {
 		}
 	}
 
+	scenario.GotenbergDockerRegistry = *registry
 	scenario.GotenbergDockerRepository = *repository
 	scenario.GotenbergVersion = *version
 	scenario.GotenbergContainerPlatform = *platform

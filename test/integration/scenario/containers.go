@@ -15,6 +15,7 @@ import (
 )
 
 var (
+	GotenbergDockerRegistry    string
 	GotenbergDockerRepository  string
 	GotenbergVersion           string
 	GotenbergContainerPlatform string
@@ -84,7 +85,7 @@ func startGotenbergContainer(ctx context.Context, env map[string]string) (*testc
 	}
 
 	req := testcontainers.ContainerRequest{
-		Image:         fmt.Sprintf("gotenberg/%s:%s", GotenbergDockerRepository, GotenbergVersion),
+		Image:         fmt.Sprintf("%s/%s:%s", GotenbergDockerRegistry, GotenbergDockerRepository, GotenbergVersion),
 		ImagePlatform: GotenbergContainerPlatform,
 		ExposedPorts:  []string{"3000/tcp"},
 		HostConfigModifier: func(hostConfig *container.HostConfig) {
