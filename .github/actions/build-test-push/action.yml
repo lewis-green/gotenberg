@@ -3,6 +3,9 @@ description: Build, test and push Docker images for a given platform
 author: Julien Neuhart
 
 inputs:
+  github_actor:
+    description: The GitHub actor (username) for registry login
+    required: true
   github_token:
     description: The GitHub token
     required: true
@@ -72,7 +75,7 @@ runs:
       uses: docker/login-action@v3
       with:
         registry: ghcr.io
-        username: ${{ github.actor }}
+        username: ${{ inputs.github_actor }}
         password: ${{ inputs.github_token }}
 
     - name: Log in to Docker Hub
