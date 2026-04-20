@@ -97,6 +97,7 @@ jobs:
           github_token: ${{ github.token }}
           version: edge
           platform: linux/amd64
+          skip_integrations_tests: true
 
   merge_clean_edge_tags:
     needs:
