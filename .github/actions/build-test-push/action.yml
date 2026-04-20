@@ -97,6 +97,11 @@ runs:
           --alternate-repository "$INPUT_ALTERNATE_REPOSITORY" \
           --dry-run "$INPUT_DRY_RUN"
 
+    - name: Prune Docker networks
+      if: inputs.skip_integrations_tests != 'true'
+      shell: bash
+      run: docker network prune -f
+
     - name: Run integration tests
       if: inputs.skip_integrations_tests != 'true'
       shell: bash
