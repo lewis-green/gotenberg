@@ -97,10 +97,13 @@ runs:
           --alternate-repository "$INPUT_ALTERNATE_REPOSITORY" \
           --dry-run "$INPUT_DRY_RUN"
 
-    - name: Prune Docker networks
+    - name: Configure Docker daemon address pools
       if: inputs.skip_integrations_tests != 'true'
       shell: bash
-      run: docker network prune -f
+      run: |
+        echo '{"default-address-pools":[{"base":"10.0.0.0/8","size":24}]}' | sudo tee /etc/docker/daemon.json
+        sudo systemctl restart docker
+        docker network prune -f
 
     - name: Run integration tests
       if: inputs.skip_integrations_tests != 'true'
