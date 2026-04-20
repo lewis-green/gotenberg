@@ -31,11 +31,11 @@ type browser interface {
 
 type browserArguments struct {
 	// Executor args.
-	binPath                  string
-	allowInsecureLocalhost   bool
-	ignoreCertificateErrors  bool
-	disableWebSecurity       bool
-	allowFileAccessFromFiles bool
+	binPath                     string
+	allowInsecureLocalhost      bool
+	ignoreCertificateErrors     bool
+	disableWebSecurity          bool
+	allowFileAccessFromFiles    bool
 	hostResolverRules           string
 	proxyServer                 string
 	wsUrlReadTimeout            time.Duration

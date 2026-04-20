@@ -494,10 +494,10 @@ func (mod *Chromium) Provision(ctx *gotenberg.Context) error {
 		wsUrlReadTimeout:         flags.MustDuration("chromium-start-timeout"),
 		hyphenDataDirPath:        hyphenDataDirPath,
 
-		allowList:         flags.MustRegexpSlice("chromium-allow-list"),
-		denyList:          flags.MustRegexpSlice("chromium-deny-list"),
-		clearCache:        flags.MustBool("chromium-clear-cache"),
-		clearCookies:      flags.MustBool("chromium-clear-cookies"),
+		allowList:                   flags.MustRegexpSlice("chromium-allow-list"),
+		denyList:                    flags.MustRegexpSlice("chromium-deny-list"),
+		clearCache:                  flags.MustBool("chromium-clear-cache"),
+		clearCookies:                flags.MustBool("chromium-clear-cookies"),
 		disableJavaScript:           flags.MustBool("chromium-disable-javascript"),
 		disablePrivateNetworkAccess: flags.MustBool("chromium-disable-private-network-access"),
 	}
