@@ -34,6 +34,7 @@ runs:
       uses: actions/checkout@v6
 
     - name: Log in to Docker Hub
+      if: inputs.docker_hub_username != ''
       uses: docker/login-action@v3
       with:
         username: ${{ inputs.docker_hub_username }}
