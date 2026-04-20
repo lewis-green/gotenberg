@@ -94,6 +94,7 @@ jobs:
         id: build_test_push
         uses: ./.github/actions/build-test-push
         with:
+          github_token: ${{ github.token }}
           version: edge
           platform: linux/amd64
 
