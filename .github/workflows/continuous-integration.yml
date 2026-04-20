@@ -18,7 +18,7 @@ permissions:
 jobs:
   lint:
     name: Lint Golang codebase
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - name: Checkout source code
         uses: actions/checkout@v6
@@ -35,7 +35,7 @@ jobs:
 
   lint-prettier:
     name: Lint non-Golang codebase
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - name: Checkout source code
         uses: actions/checkout@v6
@@ -56,7 +56,7 @@ jobs:
       - lint
       - lint-prettier
     name: Run unit tests
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - name: Checkout source code
         uses: actions/checkout@v6
@@ -74,7 +74,7 @@ jobs:
     needs:
       - test-unit
     name: Snapshot linux/amd64
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     outputs:
       tags: ${{ steps.build_test_push.outputs.tags }}
       tags_chromium: ${{ steps.build_test_push.outputs.tags_chromium }}
@@ -134,7 +134,7 @@ jobs:
     needs:
       - test-unit
     name: Snapshot linux/386
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     outputs:
       tags: ${{ steps.build_test_push.outputs.tags }}
       tags_chromium: ${{ steps.build_test_push.outputs.tags_chromium }}
@@ -227,7 +227,7 @@ jobs:
       - snapshot_arm64
       - snapshot_arm_v7
     name: Secrets access check
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     outputs:
       continue: ${{ steps.check.outputs.continue }}
     steps:
@@ -250,7 +250,7 @@ jobs:
       - snapshot_arm64
       - snapshot_arm_v7
     name: Merge and clean snapshot tags
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - name: Checkout source code
         uses: actions/checkout@v6
@@ -309,7 +309,7 @@ jobs:
     needs:
       - test-unit
     name: Edge linux/amd64
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     outputs:
       tags: ${{ steps.build_test_push.outputs.tags }}
       tags_chromium: ${{ steps.build_test_push.outputs.tags_chromium }}
@@ -338,7 +338,7 @@ jobs:
     needs:
       - test-unit
     name: Edge linux/386
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     outputs:
       tags: ${{ steps.build_test_push.outputs.tags }}
       tags_chromium: ${{ steps.build_test_push.outputs.tags_chromium }}
@@ -457,7 +457,7 @@ jobs:
       - edge_arm64
       - edge_arm_v7
     name: Merge and clean edge tags
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - name: Checkout source code
         uses: actions/checkout@v6

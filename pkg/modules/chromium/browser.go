@@ -36,10 +36,11 @@ type browserArguments struct {
 	ignoreCertificateErrors  bool
 	disableWebSecurity       bool
 	allowFileAccessFromFiles bool
-	hostResolverRules        string
-	proxyServer              string
-	wsUrlReadTimeout         time.Duration
-	hyphenDataDirPath        string
+	hostResolverRules           string
+	proxyServer                 string
+	wsUrlReadTimeout            time.Duration
+	hyphenDataDirPath           string
+	disablePrivateNetworkAccess bool
 
 	// Tasks specific.
 	allowList         []*regexp2.Regexp
@@ -106,10 +107,11 @@ func (b *chromiumBrowser) Start(logger *slog.Logger) error {
 		chromedp.Flag("disable-dev-shm-usage", true),
 		// See https://github.com/gotenberg/gotenberg/issues/1293.
 		chromedp.Flag("disable-component-update", false),
-		// Disable Chrome's Private Network Access restrictions so that pages
-		// served from public origins can fetch resources on private IPs.
-		chromedp.Flag("disable-features", "PrivateNetworkAccessSendPreflights,BlockInsecurePrivateNetworkRequests"),
 	)
+
+	if b.arguments.disablePrivateNetworkAccess {
+		opts = append(opts, chromedp.Flag("disable-features", "PrivateNetworkAccessSendPreflights,BlockInsecurePrivateNetworkRequests"))
+	}
 
 	if b.arguments.allowInsecureLocalhost {
 		// See https://github.com/gotenberg/gotenberg/issues/488.
