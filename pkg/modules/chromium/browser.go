@@ -397,6 +397,10 @@ func (b *chromiumBrowser) do(ctx context.Context, logger *slog.Logger, url strin
 		consoleExceptionsMu sync.RWMutex
 	)
 
+	if !b.arguments.disableJavaScript {
+		listenForEventConsoleAPICalled(taskCtx, logger)
+	}
+
 	// See https://github.com/gotenberg/gotenberg/issues/262.
 	if options.FailOnConsoleExceptions && !b.arguments.disableJavaScript {
 		listenForEventExceptionThrown(taskCtx, logger, &consoleExceptions, &consoleExceptionsMu)

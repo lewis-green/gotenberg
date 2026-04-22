@@ -395,6 +395,26 @@ func listenForEventLoadingFailed(ctx context.Context, logger *slog.Logger, optio
 	})
 }
 
+// listenForEventConsoleAPICalled logs all console.log/warn/error/info/debug
+// calls from the page at debug level so they appear in Gotenberg's structured
+// log output. Useful for diagnosing waitForExpression conditions that never
+// become true.
+func listenForEventConsoleAPICalled(ctx context.Context, logger *slog.Logger) {
+	chromedp.ListenTarget(ctx, func(ev any) {
+		if ev, ok := ev.(*runtime.EventConsoleAPICalled); ok {
+			args := make([]string, len(ev.Args))
+			for i, arg := range ev.Args {
+				if arg.Value != nil {
+					args[i] = string(arg.Value)
+				} else {
+					args[i] = fmt.Sprintf("<%s>", arg.Type)
+				}
+			}
+			logger.DebugContext(ctx, fmt.Sprintf("console.%s: %s", ev.Type, strings.Join(args, " ")))
+		}
+	})
+}
+
 // listenForEventExceptionThrown listens for exceptions in the console and
 // appends those exceptions to the given error pointer.
 // See https://github.com/gotenberg/gotenberg/issues/262.
