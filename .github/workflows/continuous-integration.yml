@@ -166,6 +166,7 @@ jobs:
       - name: Clean
         uses: ./.github/actions/clean
         with:
+          github_token: ${{ github.token }}
           docker_hub_username: ${{ secrets.DOCKERHUB_USERNAME }}
           docker_hub_password: ${{ secrets.DOCKERHUB_TOKEN }}
           tags: "${{ needs.edge_amd64.outputs.tags }}"

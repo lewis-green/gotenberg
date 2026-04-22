@@ -1,14 +1,17 @@
 name: Clean
-description: Clean tags from Docker Hub
+description: Clean per-platform tags from ghcr.io and/or Docker Hub
 author: Julien Neuhart
 
 inputs:
+  github_token:
+    description: The GitHub token for ghcr.io cleanup
+    required: false
   docker_hub_username:
     description: The Docker Hub username
-    required: true
+    required: false
   docker_hub_password:
     description: The Docker Hub password
-    required: true
+    required: false
   tags:
     description: Comma separated list of tags to clean
   snapshot_version:
@@ -19,8 +22,9 @@ inputs:
 runs:
   using: composite
   steps:
-    - name: Clean tags from Docker Hub
+    - name: Clean tags
       env:
+        GITHUB_TOKEN: ${{ inputs.github_token }}
         DOCKERHUB_USERNAME: ${{ inputs.docker_hub_username }}
         DOCKERHUB_TOKEN: ${{ inputs.docker_hub_password }}
         INPUT_TAGS: ${{ inputs.tags }}
