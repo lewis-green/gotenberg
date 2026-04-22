@@ -65,55 +65,16 @@ for tag in "${tags_to_delete[@]}"; do
   fi
 done
 
-# Delete ghcr.io tags via GitHub API.
+# ghcr.io tags are intentionally not deleted. Deleting a package version on
+# ghcr.io removes the underlying manifest, which breaks any multi-platform
+# index that references that digest. Per-platform tags (e.g. :edge-amd64)
+# must remain so that the merged manifest (e.g. :edge) stays valid.
 if [ "${#ghcr_tags[@]}" -gt 0 ]; then
-  if [ -z "$GITHUB_TOKEN" ]; then
-    echo "⚠️ GITHUB_TOKEN not set, skipping ghcr.io cleanup"
-    echo
-  else
-    for tag in "${ghcr_tags[@]}"; do
-      remainder="${tag#ghcr.io/}"
-      owner="${remainder%%/*}"
-      pkg_tag="${remainder#*/}"
-      package_name="${pkg_tag%%:*}"
-      tag_name="${pkg_tag##*:}"
-
-      if [ "$dry_run" = "true" ]; then
-        echo "🚧 Dry run - would delete ghcr.io tag: $tag"
-        echo
-        continue
-      fi
-
-      echo "🌐 Delete tag $tag from ghcr.io"
-
-      # Try user package endpoint first, then org endpoint.
-      version_id=$(
-        gh api "/users/$owner/packages/container/$package_name/versions" \
-          --paginate \
-          -q ".[] | select(.metadata.container.tags[]? == \"$tag_name\") | .id" \
-          2> /dev/null \
-          || gh api "/orgs/$owner/packages/container/$package_name/versions" \
-            --paginate \
-            -q ".[] | select(.metadata.container.tags[]? == \"$tag_name\") | .id" \
-            2> /dev/null || true
-      )
-
-      if [ -z "$version_id" ]; then
-        echo "⚠️ Tag $tag_name not found in $package_name, skipping"
-        echo
-        continue
-      fi
-
-      gh api --method DELETE \
-        "/users/$owner/packages/container/$package_name/versions/$version_id" \
-        2> /dev/null \
-        || gh api --method DELETE \
-          "/orgs/$owner/packages/container/$package_name/versions/$version_id"
-
-      echo "➡️ $tag deleted"
-      echo
-    done
-  fi
+  echo "ℹ️ Skipping ghcr.io tags (manifest deletion would break merged index):"
+  for tag in "${ghcr_tags[@]}"; do
+    echo "- $tag"
+  done
+  echo
 fi
 
 # Delete Docker Hub tags.
