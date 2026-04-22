@@ -91,11 +91,11 @@ if [ "${#ghcr_tags[@]}" -gt 0 ]; then
         gh api "/users/$owner/packages/container/$package_name/versions" \
           --paginate \
           -q ".[] | select(.metadata.container.tags[]? == \"$tag_name\") | .id" \
-          2>/dev/null ||
-        gh api "/orgs/$owner/packages/container/$package_name/versions" \
-          --paginate \
-          -q ".[] | select(.metadata.container.tags[]? == \"$tag_name\") | .id" \
-          2>/dev/null || true
+          2> /dev/null \
+          || gh api "/orgs/$owner/packages/container/$package_name/versions" \
+            --paginate \
+            -q ".[] | select(.metadata.container.tags[]? == \"$tag_name\") | .id" \
+            2> /dev/null || true
       )
 
       if [ -z "$version_id" ]; then
@@ -106,9 +106,9 @@ if [ "${#ghcr_tags[@]}" -gt 0 ]; then
 
       gh api --method DELETE \
         "/users/$owner/packages/container/$package_name/versions/$version_id" \
-        2>/dev/null ||
-      gh api --method DELETE \
-        "/orgs/$owner/packages/container/$package_name/versions/$version_id"
+        2> /dev/null \
+        || gh api --method DELETE \
+          "/orgs/$owner/packages/container/$package_name/versions/$version_id"
 
       echo "➡️ $tag deleted"
       echo
