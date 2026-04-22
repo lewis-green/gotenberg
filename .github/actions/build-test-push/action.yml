@@ -12,10 +12,10 @@ inputs:
     default: ${{ github.token }}
   docker_hub_username:
     description: The Docker Hub username
-    required: true
+    required: false
   docker_hub_password:
     description: The Docker Hub password
-    required: true
+    required: false
   platform:
     description: linux/amd64, linux/ppc64le, linux/386, linux/arm64, linux/arm/v7
     required: true
@@ -79,7 +79,7 @@ runs:
         password: ${{ inputs.github_token }}
 
     - name: Log in to Docker Hub
-      if: inputs.docker_hub_username != ''
+      if: inputs.docker_hub_username != '' && inputs.docker_hub_password != ''
       uses: docker/login-action@v3
       with:
         username: ${{ inputs.docker_hub_username }}
